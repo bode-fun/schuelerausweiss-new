@@ -16,3 +16,4 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+altsystem/test/ldap_data
