@@ -1,5 +1,8 @@
 <?php
 
+use LdapRecord\Models\ActiveDirectory\User;
+
+
 return [
 
     /*
@@ -61,8 +64,9 @@ return [
 
     'providers' => [
         'users' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'driver' => 'ldap',
+            'model' => User::class,
+            'rules' => [],
         ],
 
         // 'users' => [
