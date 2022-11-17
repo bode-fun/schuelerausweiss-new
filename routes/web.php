@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,17 +15,31 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    // TODO: Change to card view
-    return view('welcome');
+    return redirect('card');
 });
 
-// TODO: Remove that
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/card', function () {
+    $user = Auth::user();
+    if ($user == null) {
+        abort(401);
+    }
+
+    // dd($user);
+
+    # Ergebnis am Ende:
+    # Nicht zu technisch, aber auch nicht zu einfach
+    # Rest erzeugt nur Eindruck, was im Kopf bleibt sind 15 Sekunden
+
+    return view('card', [
+        'firstName' => $user->cn[0],
+        'sirName' => $user->sn[0],
+        'class' => $user->roomnumber[0],
+        'imgURL' => $user->carlicense[0],
+    ]);
+})->middleware(['auth', 'verified'])->name('card');
 
 Route::get('/verify/{token}', function () {
     // TODO: Verify the token
 })->middleware(['auth', 'verified'])->name('verify');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
