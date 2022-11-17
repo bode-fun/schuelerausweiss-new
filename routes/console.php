@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Token;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 
@@ -13,6 +14,15 @@ use Illuminate\Support\Facades\Artisan;
 | simple approach to interacting with each command's IO methods.
 |
 */
+
+Artisan::command(
+    'tokens:delete',
+    function () {
+        $this->info('Deleting expired tokens');
+        Token::query()->where('created_at', '<', now()->addMinutes((int) $_ENV['TOKEN_EXPIRATION_MINUTES']))->delete();
+        
+    }
+)->purpose('Delete expired tokens');
 
 // Artisan::command('inspire', function () {
 //     $this->comment(Inspiring::quote());
