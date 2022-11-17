@@ -1,5 +1,7 @@
 <?php
 
+use LdapRecord\Models\OpenLDAP\User as OpenLDAPUser;
+
 return [
 
     /*
@@ -61,8 +63,9 @@ return [
 
     'providers' => [
         'users' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            'driver' => 'ldap',
+            'model' => OpenLDAPUser::class,
+            'rules' => [],
         ],
 
         // 'users' => [

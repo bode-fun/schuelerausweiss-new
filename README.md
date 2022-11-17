@@ -9,6 +9,12 @@ Daten:
 - Hash
 - Klasse
 
+## Aufgaben
+
+- [ ] Datenbank
+- [ ] Bild
+- [ ] 
+
 Bestandateile:
 
 - [ ] Frontend
@@ -24,18 +30,23 @@ Datenschutz erreicht????
 
 - docker
 - docker compose plugin
-- ext-ldap (sudo apt install php8.1-ldap)
-- 
+- ext-ldap (sudo apt install php8.1-ldap php-ldap)
 
 ### Ldap
 
-#### Start Ldap Server
+#### Start
 
 ```bash
+sudo service docker start
+sudo service mysql start
 # cd into the project root
 # you might need to run this command with sudo
 docker compose up -d
+php artisan migrate
+php artisan serve
 ```
+
+Login with Jan & hallo
 
 #### Login as admin
 
