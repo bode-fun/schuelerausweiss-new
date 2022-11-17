@@ -34,7 +34,7 @@ return [
     */
 
     'connections' => [
-
+        // TODO: Move to Docker or SQlite
         'sqlite' => [
             'driver' => 'sqlite',
             'url' => env('DATABASE_URL'),
