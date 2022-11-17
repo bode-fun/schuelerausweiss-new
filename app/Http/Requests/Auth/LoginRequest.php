@@ -46,7 +46,7 @@ class LoginRequest extends FormRequest
         $this->ensureIsNotRateLimited();
 
         $credentials = [
-            'samaccountname' => $this->username,
+            'cn' => $this->username,
             'password' => $this->password,
         ];
 
