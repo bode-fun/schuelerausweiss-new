@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Token;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -24,22 +25,78 @@ Route::get('/card', function () {
         abort(401);
     }
 
+    $uuid = \Illuminate\Support\Str::uuid();
+    $token = Token::create([
+        'uuid' => $uuid,
+    ]);
+
+    $createdAt = $token->created_at;
+    // As string
+    $expiresAt = $createdAt->addMinutes((int) $_ENV["TOKEN_EXPIRATION_MINUTES"])->format('H:i');
+
     // dd($user);
 
     # Ergebnis am Ende:
     # Nicht zu technisch, aber auch nicht zu einfach
     # Rest erzeugt nur Eindruck, was im Kopf bleibt sind 15 Sekunden
 
+    $firstName = $user->cn[0];
+    // Get first and last character of first name
+    $firstCharName = mb_substr($firstName, 0, 1);
+    $lastCharName = mb_substr($firstName, -1);
+    $lenName = mb_strlen($firstName);
+    $abbreviatedFirstName = $firstCharName  . str_repeat('.', $lenName - 2) . $lastCharName;
+    $encryptedFirstName = urlencode(encrypt($abbreviatedFirstName));
+
+    // Get first and last character of sir name
+    $sirName = $user->sn[0];
+    $firstCharSirName = mb_substr($sirName, 0, 1);
+    $lastCharSirName = mb_substr($sirName, -1);
+    $lenSirName = mb_strlen($sirName);
+    $abbreviatedSirName = $firstCharSirName . str_repeat('.', $lenSirName - 2) . $lastCharSirName;
+    $encryptedSirName = urlencode(encrypt($abbreviatedSirName));
+
     return view('card', [
-        'firstName' => $user->cn[0],
-        'sirName' => $user->sn[0],
+        'firstName' => $firstName,
+        'firstNameEncrypted' => $encryptedFirstName,
+        'sirName' => $sirName,
+        'sirNameEncrypted' => $encryptedSirName,
         'class' => $user->roomnumber[0],
         'imgURL' => $user->carlicense[0],
+        'uuid' => encrypt(urlencode($uuid)),
+        'expiresAt' => $expiresAt,
     ]);
 })->middleware(['auth', 'verified'])->name('card');
 
-Route::get('/verify/{token}', function () {
-    // TODO: Verify the token
+Route::get('/verify/{token}/{firstName}/{sirName}', function () {
+    try {
+        $sirName = decrypt(urldecode(request()->sirName));
+        $firstName = decrypt(urldecode(request()->firstName));
+        $tokenFromUrl = decrypt(urldecode(request()->token));
+
+        $token = Token::query()->where('uuid', $tokenFromUrl)->get()->first();
+
+        if ($token != null) {
+            // Check the time of the token
+            $createdAt = $token->created_at;
+            $expiresAt = $createdAt->addMinutes((int) $_ENV['TOKEN_EXPIRATION_MINUTES']);
+
+            $token->delete();
+
+            if (now()->greaterThan($expiresAt)) {
+                return 'Token expired';
+            }
+        } else {
+            return 'Link already used please try again with a fresh QR Code';
+        }
+
+        return view('verify', [
+            'firstName' => $firstName,
+            'sirName' => $sirName,
+        ]);
+    } catch (\Exception $e) {
+        abort(500);
+    }
 })->middleware(['auth', 'verified'])->name('verify');
 
 require __DIR__ . '/auth.php';
