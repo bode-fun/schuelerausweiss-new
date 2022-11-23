@@ -64,7 +64,7 @@ Route::get('/card', function () {
         'sirNameEncrypted' => $encryptedSirName,
         'class' => $user->roomnumber[0],
         'imgURL' => $user->carlicense[0],
-        'uuid' => encrypt(urlencode($uuid)),
+        'uuid' => urlencode($uuid),
         'expiresAt' => $expiresAt,
         'birthday' => $birthday,
     ]);
@@ -74,7 +74,7 @@ Route::get('/verify/{token}/{firstName}/{sirName}', function () {
     try {
         $sirName = decrypt(urldecode(request()->sirName));
         $firstName = decrypt(urldecode(request()->firstName));
-        $tokenFromUrl = decrypt(urldecode(request()->token));
+        $tokenFromUrl = urldecode(request()->token);
 
         $token = Token::query()->where('uuid', $tokenFromUrl)->get()->first();
 
