@@ -81,8 +81,8 @@ Route::get('/verify/{token}/{firstName}/{sirName}', function () {
         return view('verify', [
             'firstName' => $firstName,
             'sirName' => $sirName,
-            'valid' => $resp === true,
-            'resp' => $resp,
+            'valid' => $resp,
+            'resp' => 'Token bereits verwendet oder abgelaufen. Bitte Token neu anfordern.',
         ]);
     } catch (\Exception $e) {
         abort(500);
