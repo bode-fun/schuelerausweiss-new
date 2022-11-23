@@ -10,7 +10,7 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     {{ $firstName }} {{ $sirName }}
-                    ist nur mit personalausweiss gültig
+                    ist nur mit personalausweiss gültia
                 </div>
             </div>
         </div>
