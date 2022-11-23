@@ -34,12 +34,12 @@ class Tokencontroller extends Controller
             $token->delete();
 
             if (now()->greaterThan($expiresAt)) {
-                return 'Token ist abgelaufen. Bitte Token neu anfordern.';
+                return false;
             }
-        } else {
-            return 'Token bereits verwendet oder nicht vorhanden. Bitte Token neu anfordern.';
-        }
 
-        return true;
+            return true;
+        } else {
+            return false;
+        }
     }
 }
