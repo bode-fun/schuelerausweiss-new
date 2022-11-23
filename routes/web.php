@@ -50,7 +50,7 @@ Route::get('/card', function () {
 
     // Get first and last character of sir name
     $sirName = $user->sn[0];
-    $birthday = $user->birthday[0];
+    // $birthday = $user->birthday[0];
     $firstCharSirName = mb_substr($sirName, 0, 1);
     $lastCharSirName = mb_substr($sirName, -1);
     $lenSirName = mb_strlen($sirName);
@@ -66,7 +66,7 @@ Route::get('/card', function () {
         'imgURL' => $user->carlicense[0],
         'uuid' => urlencode($uuid),
         'expiresAt' => $expiresAt,
-        'birthday' => $birthday,
+        // 'birthday' => $birthday,
     ]);
 })->middleware(['auth', 'verified'])->name('card');
 
