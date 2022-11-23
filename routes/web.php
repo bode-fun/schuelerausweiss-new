@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Tokencontroller;
 use App\Models\Token;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -25,10 +26,9 @@ Route::get('/card', function () {
         abort(401);
     }
 
-    $uuid = \Illuminate\Support\Str::uuid();
-    $token = Token::create([
-        'uuid' => $uuid,
-    ]);
+    $token = Tokencontroller::createToken();
+    $uuid = $token->uuid;
+
 
     $createdAt = $token->created_at;
     // As string
@@ -50,7 +50,7 @@ Route::get('/card', function () {
 
     // Get first and last character of sir name
     $sirName = $user->sn[0];
-    // $birthday = $user->birthday[0];
+    $birthday = $user->title[0];
     $firstCharSirName = mb_substr($sirName, 0, 1);
     $lastCharSirName = mb_substr($sirName, -1);
     $lenSirName = mb_strlen($sirName);
@@ -76,25 +76,13 @@ Route::get('/verify/{token}/{firstName}/{sirName}', function () {
         $firstName = decrypt(urldecode(request()->firstName));
         $tokenFromUrl = urldecode(request()->token);
 
-        $token = Token::query()->where('uuid', $tokenFromUrl)->get()->first();
-
-        if ($token != null) {
-            // Check the time of the token
-            $createdAt = $token->created_at;
-            $expiresAt = $createdAt->addMinutes((int) $_ENV['TOKEN_EXPIRATION_MINUTES']);
-
-            $token->delete();
-
-            if (now()->greaterThan($expiresAt)) {
-                return 'Token expired';
-            }
-        } else {
-            return 'Link already used please try again with a fresh QR Code';
-        }
+        $resp = Tokencontroller::verifyToken($tokenFromUrl);
 
         return view('verify', [
             'firstName' => $firstName,
             'sirName' => $sirName,
+            'valid' => $resp === true,
+            'resp' => $resp,
         ]);
     } catch (\Exception $e) {
         abort(500);
