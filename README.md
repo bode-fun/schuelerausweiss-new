@@ -2,8 +2,8 @@
 
 ## Responsibilities
 
-- Jan: Backend, Documentation, Tests
-- Marvin: Prasentation, Documentation
+- Jan: Backend, Documentation, Tests, Infrastructure
+- Marvin: Presentation, Documentation, Privacy
 - Angelo: Frontend
 
 ## Links
