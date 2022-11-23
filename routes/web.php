@@ -66,7 +66,7 @@ Route::get('/card', function () {
         'imgURL' => $user->carlicense[0],
         'uuid' => urlencode($uuid),
         'expiresAt' => $expiresAt,
-        // 'birthday' => $birthday,
+        'birthday' => $birthday,
     ]);
 })->middleware(['auth', 'verified'])->name('card');
 

@@ -9,10 +9,6 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="">
-                    <!-- {{ $expiresAt }} is at utc + 0 cat to local time -->
-                    <!-- <a class="p-2 rounded-md bg-black text-white mb-2"
-                        href={{ route('verify', ['token' => $uuid, 'firstName' => $firstNameEncrypted, 'sirName' => $sirNameEncrypted]) }}>Verify</a>
-                    <img src="{{ $imgURL }}"> -->
                     <input type="hidden" value="{{ route('verify', ['token' => $uuid, 'firstName' => $firstNameEncrypted, 'sirName' => $sirNameEncrypted]) }}" id="qrCodeValue">
                     <div class='card' id="card">
                         <div class="flip">
@@ -21,8 +17,7 @@
 
                                     <div class="card-left">
                                         <div class='card-chip'>
-                                            <img class="card-img" src="https://cdn.pixabay.com/photo/2016/08/20/05/38/avatar-1606916_960_720.png">
-                                            <!-- <img class="card-img" src="{{ $imgURL }}"> -->
+                                            <img class="card-img" src="{{ $imgURL }}">
                                         </div>
                                     </div>
                                     <span class='card-right'>
@@ -30,9 +25,8 @@
                                         <div class="card-info">
                                             <span class="card-info-label">Vorname, Nachname:</span><br>
                                             <span class="card-info-text" id="name">{{ $firstName }} {{ $sirName }}</span><br>
-                                            <span class="card-info-label">Geburtsdatum:</span>2000<br>
-                                            <!-- <span class="card-info-label">Geburtsdatum:</span>{{ $birthday }}<br> -->
-                                            <span class="card-info-text" id="birthday"></span><br>
+                                            <span class="card-info-label">Geburtsdatum:</span><br>
+                                            <span class="card-info-text" id="birthday">{{ $birthday }}</span><br>
                                             <div style="display:inline-block;">
                                                 <span class="card-info-label" style="margin-right: 15px;">Klasse:</span>
                                             </div>
