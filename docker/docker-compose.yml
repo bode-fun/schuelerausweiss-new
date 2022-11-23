@@ -1,0 +1,47 @@
+version: '3.7'
+services:
+  openldap:
+    image: osixia/openldap:latest
+    container_name: openldap
+    hostname: openldap
+    ports:
+      - "389:389"
+      - "636:636"
+    volumes:
+      - ./ldap_data/certificates:/container/service/slapd/assets/certs
+      - ./ldap_data/slapd/database:/var/lib/ldap
+      - ./ldap_data/slapd/config:/etc/ldap/slapd.d
+    environment:
+      - LDAP_ORGANISATION=yourOrganisation
+      - LDAP_DOMAIN=yourOrganisation.loc
+      - LDAP_ADMIN_USERNAME=admin
+      - LDAP_ADMIN_PASSWORD=admin
+      - LDAP_CONFIG_PASSWORD=config_pass
+      - "LDAP_BASE_DN=dc=yourOrganisation,dc=loc"
+      - LDAP_TLS_CRT_FILENAME=server.crt
+      - LDAP_TLS_KEY_FILENAME=server.key
+      - LDAP_TLS_CA_CRT_FILENAME=yourOrganisation.com.ca.crt
+      - LDAP_READONLY_USER=true
+      - LDAP_READONLY_USER_USERNAME=user-read-only
+      - LDAP_READONLY_USER_PASSWORD=user-read-only
+    networks:
+      - ldapnet
+
+  phpldapadmin:
+    image: osixia/phpldapadmin:latest
+    container_name: phpldapadmin
+    hostname: phpldapadmin
+    ports:
+      - "8081:80"
+    environment:
+      - PHPLDAPADMIN_LDAP_HOSTS=openldap
+      - PHPLDAPADMIN_HTTPS=false
+    depends_on:
+      - openldap
+    networks:
+      - ldapnet
+
+
+networks:
+  ldapnet:
+    driver: bridge
