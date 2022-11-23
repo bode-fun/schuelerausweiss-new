@@ -50,6 +50,7 @@ Route::get('/card', function () {
 
     // Get first and last character of sir name
     $sirName = $user->sn[0];
+    $birthday = $user->birthday[0];
     $firstCharSirName = mb_substr($sirName, 0, 1);
     $lastCharSirName = mb_substr($sirName, -1);
     $lenSirName = mb_strlen($sirName);
@@ -63,8 +64,9 @@ Route::get('/card', function () {
         'sirNameEncrypted' => $encryptedSirName,
         'class' => $user->roomnumber[0],
         'imgURL' => $user->carlicense[0],
-        'uuid' => encrypt(urlencode($uuid)),
+        'uuid' => urlencode($uuid),
         'expiresAt' => $expiresAt,
+        'birthday' => $birthday,
     ]);
 })->middleware(['auth', 'verified'])->name('card');
 
@@ -72,7 +74,7 @@ Route::get('/verify/{token}/{firstName}/{sirName}', function () {
     try {
         $sirName = decrypt(urldecode(request()->sirName));
         $firstName = decrypt(urldecode(request()->firstName));
-        $tokenFromUrl = decrypt(urldecode(request()->token));
+        $tokenFromUrl = urldecode(request()->token);
 
         $token = Token::query()->where('uuid', $tokenFromUrl)->get()->first();
 
@@ -97,6 +99,6 @@ Route::get('/verify/{token}/{firstName}/{sirName}', function () {
     } catch (\Exception $e) {
         abort(500);
     }
-})->middleware(['auth', 'verified'])->name('verify');
+})->name('verify');
 
 require __DIR__ . '/auth.php';
