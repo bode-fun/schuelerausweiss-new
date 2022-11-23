@@ -46,7 +46,7 @@ class LoginRequest extends FormRequest
         $this->ensureIsNotRateLimited();
 
         $credentials = [
-            'cn' => $this->username,
+            'cn' => $this->username, // IMPORTANT: Using Active Directory, this should be samaccountname
             'password' => $this->password,
         ];
 
@@ -93,6 +93,7 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey()
     {
+        // TODO: Change this
         return Str::transliterate(Str::lower($this->input('email')) . '|' . $this->ip());
     }
 }

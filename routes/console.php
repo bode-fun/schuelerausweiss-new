@@ -20,10 +20,5 @@ Artisan::command(
     function () {
         $this->info('Deleting expired tokens');
         Token::query()->where('created_at', '<', now()->addMinutes((int) $_ENV['TOKEN_EXPIRATION_MINUTES']))->delete();
-        
     }
 )->purpose('Delete expired tokens');
-
-// Artisan::command('inspire', function () {
-//     $this->comment(Inspiring::quote());
-// })->purpose('Display an inspiring quote');
