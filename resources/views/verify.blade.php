@@ -1,14 +1,21 @@
 <x-guest-layout>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
+            <div class="overflow-hidden">
+                <div class="p-6">
 
                     @if ($valid)
-                        {{ $firstName }} {{ $sirName }}
-                        ist nur mit personalausweiss gültig
+                        <div class="shadowed-card">
+                            <div class="success-icon"></div><br>
+                            <b>{{ $firstName }} {{ $sirName }}</b> <br> ist nur mit Personalausweis gültig<br>
+                        </div>
                     @else
-                        {{ $resp }}
+                        <div class="shadowed-card">
+                            <div class="error-icon"></div><br>
+                            <b>
+                                {{ $resp }}
+                            </b><br>
+                        </div>
                     @endif
 
 
